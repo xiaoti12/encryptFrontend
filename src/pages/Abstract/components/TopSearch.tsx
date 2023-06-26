@@ -11,7 +11,7 @@ import styles from '../style.less';
 const columns = [
   {
     title: '异常流',
-    dataIndex: 'flowId',
+    dataIndex: 'flowID',
     valueType: 'textarea',
   },
   {
@@ -21,7 +21,7 @@ const columns = [
   },
   {
     title: '异常时间',
-    dataIndex: 'latestTime',
+    dataIndex: 'beginTime',
     valueType: 'dateTime',
   },
 ];
@@ -33,7 +33,6 @@ const TopSearch = ({
   loading: boolean;
   abnormalEvent: API_Detail.ueFlowListItem[];
 }) => {
-  debugger;
   return (
     <Card
       loading={loading}
@@ -82,7 +81,7 @@ const TopSearch = ({
       {/*  </Col>*/}
       {/*</Row>*/}
       <Table<any>
-        rowKey={(record) => record.flowId}
+        rowKey={(record) => record.flowID}
         size="small"
         columns={columns}
         dataSource={abnormalEvent}
