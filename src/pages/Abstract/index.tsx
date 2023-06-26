@@ -1,4 +1,3 @@
-import type {FC} from 'react';
 import React, {Suspense, useEffect, useState} from 'react';
 import {Col, Row} from 'antd';
 import {GridContent} from '@ant-design/pro-components';
@@ -9,14 +8,10 @@ import type moment from 'moment';
 import IntroduceRow from './components/IntroduceRow';
 import TopSearch from './components/TopSearch';
 import ProportionSales from './components/ProportionSales';
-import {useRequest} from '@umijs/max';
 
 import {abstractData} from './service';
 import PageLoading from './components/PageLoading';
-import type {TimeType} from './components/SalesCard';
 import {getTimeDistance} from './utils/utils';
-import styles from './style.less';
-import map from "@antv/util/src/map";
 
 type RangePickerValue = RangePickerProps<moment.Moment>['value'];
 type SalesType = 'all' | 'offline' | 'online';
@@ -25,7 +20,16 @@ type SalesType = 'all' | 'offline' | 'online';
 const Analysis: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [salesType, setSalesType] = useState<SalesType>('all');
-  const [abstractValue, setAbstractValue] = useState<API_Abstract.abstract>();
+  const [abstractValue, setAbstractValue] = useState<API_Abstract.abstract>({
+    abnormalEvent: [],
+    abnormalFlowBinary: {abnormal: 0, normal: 0},
+    abnormalFlowMulti: {abnormal: 0, normal: 0},
+    introduce: {
+      activeTask: {online: 0, offline: 0},
+      completedTask: [],
+      Abnormal: [],
+      Normal: [],}
+  });
   const [currentTabKey, setCurrentTabKey] = useState<string>('');
   const [rangePickerValue, setRangePickerValue] = useState<RangePickerValue>(
     getTimeDistance('year'),
@@ -40,15 +44,15 @@ const Analysis: React.FC = () => {
       setSalesPieData([
         {
           x: '正常流量',
-          y: msg.data?.abnormalFlowBinary.normal,
+          y: msg.data?.abnormalFlowBinary?.normal,
         },
         {
           x: '异常流量',
-          y: msg.data?.abnormalFlowBinary.abnormal,
+          y: msg.data?.abnormalFlowBinary?.abnormal,
         },
-      ])
-      setLoading(false);
+      ]);
     };
+    setLoading(false);
     fetchData();
   },[]);
 
@@ -66,7 +70,7 @@ const Analysis: React.FC = () => {
         <>
 
           <Suspense fallback={<PageLoading />}>
-            <IntroduceRow loading={false} visitData={abstractValue.introduce} />
+            <IntroduceRow loading={false} introduceData={abstractValue.introduce} />
           </Suspense>
 
 

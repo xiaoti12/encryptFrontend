@@ -8,7 +8,7 @@ import {
   ProColumns,
 } from '@ant-design/pro-components';
 import {useParams} from '@umijs/max';
-import {task, packet,flowByTask,packetByueid} from './service';
+import {task, flowByTask} from './service';
 
 
 const TaskDetailPage: React.FC = () => {
@@ -106,97 +106,19 @@ const TaskDetailPage: React.FC = () => {
 
   const ueflow_columns: ProColumns<API_Detail.ueFlowListItem>[] = [
     {
+      title: '任务ID',
+      dataIndex: 'taskID',
+      valueType: 'textarea',
+    },
+    {
       title: '流ID',
       dataIndex: 'flowId',
-      valueType: 'textarea',
-    },
-    {
-      title: 'UEID',
-      dataIndex: 'ranUeNgapId',
-      valueType: 'textarea',
-    },
-    {
-      title: '数据包数',
-      dataIndex: 'totalNum',
       valueType: 'textarea',
     },
     {
       title: '开始时间',
       dataIndex: 'beginTime',
       valueType: 'dateTime',
-    },
-    {
-      title: '结束时间',
-      dataIndex: 'latestTime',
-      valueType: 'dateTime',
-    },
-    {
-      title: '流状态',
-      dataIndex: 'statusFlow',
-      valueEnum: {
-        100: {
-          text: '正常',
-          status: 'Success',
-        },
-        200: {
-          text: '异常',
-          status: 'Error',
-        },
-        0: {
-          text: '待解析',
-          status: 'Default',
-        },
-      },
-    },
-    {
-      title: '任务ID',
-      dataIndex: 'taskID',
-      valueType: 'textarea',
-    }
-  ]
-
-
-  const packet_columns: ProColumns<API_Detail.packetListItem>[] = [
-    {
-      title: 'UE_ID',
-      dataIndex: 'ranUeNgapId',
-      valueType: 'textarea',
-    },
-    {
-      title: 'NGAP类型',
-      dataIndex: 'ngapType',
-      valueType: 'textarea',
-    },
-    {
-      title: 'NGAP消息码',
-      dataIndex: 'ngapProcedureCode',
-      valueType: 'textarea',
-    },
-    {
-      title: '包长度',
-      dataIndex: 'packetLen',
-      valueType: 'textarea',
-    },
-    {
-      title: '到达时间US',
-      dataIndex: 'arriveTimeUs',
-      valueType: 'textarea',
-      hideInTable: true,
-    },
-    {
-      title: '到达时间',
-      dataIndex: 'arriveTime',
-      valueType: 'dateTime',
-    },
-    {
-      title: '时间间隔',
-      dataIndex: 'timeInterval',
-      valueType: 'textarea',
-    },
-    {
-      title: '校验码',
-      dataIndex: 'verificationTag',
-      valueType: 'textarea',
     },
     {
       title: '源IP',
@@ -209,29 +131,56 @@ const TaskDetailPage: React.FC = () => {
       valueType: 'textarea',
     },
     {
-      title: '方向',
-      dataIndex: 'dirSeq',
+      title: '源端口',
+      dataIndex: 'srcPort',
       valueType: 'textarea',
     },
     {
-      title: 'UEID流ID',
-      dataIndex: 'flowUEID',
+      title: '目的端口',
+      dataIndex: 'dstPort',
       valueType: 'textarea',
-      hideInTable: true,
     },
     {
-      title: '时间流ID',
-      dataIndex: 'flowTimeID',
+      title: "异常信息",
+      dataIndex: "issuer",
       valueType: 'textarea',
-      hideInTable: true,
     },
     {
-      title: '包状态',
-      dataIndex: 'statusPacket',
+      title: "Common Name",
+      dataIndex: "commonName",
       valueType: 'textarea',
-      hideInTable: true,
-    }
+    },
+    {
+      title: "Validity",
+      dataIndex: "validity",
+      valueType: 'textarea',
+    },
+    {
+      title: "正常概率",
+      dataIndex: "whiteProb",
+      valueType: 'textarea',
+    },
+    {
+      title: "异常概率",
+      dataIndex: "blackProb",
+      valueType: 'textarea',
+    },
+    {
+      title: '分类结果',
+      dataIndex: 'classification',
+      valueEnum: {
+        1: {
+          text: '异常',
+          status: 'Error',
+        },
+        0: {
+          text: '正常',
+          status: 'Success',
+        },
+      },
+    },
   ]
+
 
   return (
     <GridContent>
@@ -298,40 +247,12 @@ const TaskDetailPage: React.FC = () => {
                   current?: number;
                 },) => {
                   const msg = await flowByTask({
-                    TaskID: selectedTaskId,
+                    taskID: selectedTaskId,
                   });
                   return {
                     data: msg.data,
                     success: msg.success,
                   };
-                }}
-                expandable={{
-                  expandedRowRender: (record) => (
-                    <ProTable<API_Detail.packetListItem, API_Detail.packetParams>
-                      headerTitle={false}
-                      options={false}
-                      actionRef={actionRef}
-                      columns={packet_columns}
-                      rowSelection={false}
-                      search={false}
-                      request={async (params: {
-                        pageSize?: number;
-                        current?: number;
-                      },) => {
-                        const msg = await packetByueid({
-                          FlowId: record.flowId,
-                        });
-
-                        return {
-                          data: msg.data,
-                          success: msg.success,
-                        };
-                      }}
-                    />
-                  ),
-                  // rowExpandable: () => true,
-                  // expandedRowKeys: expandedRows,
-                  onExpand: (expanded, record) => handleRowExpand(record, expanded),
                 }}
               /></>
           ) : (
