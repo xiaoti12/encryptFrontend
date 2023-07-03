@@ -144,7 +144,7 @@ const Login: React.FC = () => {
           }}
           logo={<img alt="logo" src="/buptlogo.svg" />}
           title="北京邮电大学"
-          subTitle={'5G核心网异常检测系统'}
+          subTitle={'加密流量异常检测系统'}
           initialValues={{
             autoLogin: true,
           }}

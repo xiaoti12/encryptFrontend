@@ -10,19 +10,25 @@ import styles from '../style.less';
 
 const columns = [
   {
-    title: '异常流',
-    dataIndex: 'flowID',
+    title: '异常源IP',
+    dataIndex: 'srcIP',
     valueType: 'textarea',
   },
   {
-    title: '归属任务',
-    dataIndex: 'taskID',
+    title: '异常目的IP',
+    dataIndex: 'dstIP',
     valueType: 'textarea',
   },
+  
   {
     title: '异常时间',
     dataIndex: 'beginTime',
     valueType: 'dateTime',
+  },
+  {
+    title: '证书CN',
+    dataIndex: 'commonName',
+    valueType: 'textarea',
   },
 ];
 

@@ -92,7 +92,7 @@ const Analysis: React.FC = () => {
               </Suspense>
             </Col>
 
-            {/*异常事件*/}
+            {/*异常IP*/}
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <TopSearch

@@ -91,7 +91,7 @@ const IntroduceRow = ({loading, introduceData}: { loading: boolean; introduceDat
       <ChartCard
         bordered={false}
         loading={loading}
-        title="N2口异常数"
+        title="异常Flow数"
         color={'#E5EDFE'}
         total={() => n2AbNormalSum}
         footer={<Field label="今日异常数" value={n2AbNormalSum}/>}
@@ -106,8 +106,8 @@ const IntroduceRow = ({loading, introduceData}: { loading: boolean; introduceDat
       <ChartCard
         loading={loading}
         bordered={false}
-        title="N2口正常数"
-        total={n2NormalSum/(n2AbNormalSum+n2NormalSum)+'%'}
+        title="正常Flow数"
+        total={(n2NormalSum*100/(n2AbNormalSum+n2NormalSum)).toFixed(4)+'%'}
         footer={
           <div style={{whiteSpace: 'nowrap', overflow: 'hidden'}}>
             今日正常数
