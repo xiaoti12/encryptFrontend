@@ -68,3 +68,15 @@ export async function startTask(body: API_Task.taskListItemKeys, options?: { [ke
     ...(options || {}),
   });
 }
+// 停止任务
+export async function exitTask(body: API_Task.taskListItemKeys, options?: { [key: string]: any }) {
+  let params = new FormData();
+  body.taskIds.forEach((taskId) => {
+    params.append('taskId', taskId);
+  });
+  return request<Record<string, any>>('/myapi/task/exitTask', {
+    method: 'POST',
+    data: params,
+    ...(options || {}),
+  });
+}

@@ -1,4 +1,4 @@
-import {task, addTask, updateTask, removeTask, startTask} from '@/pages/Task/service';
+import {task, addTask, updateTask, removeTask, startTask, exitTask} from '@/pages/Task/service';
 import {PlusOutlined} from '@ant-design/icons';
 import type {ActionType, ProColumns, ProDescriptionsItemProps} from '@ant-design/pro-components';
 import {
@@ -115,7 +115,29 @@ const handleStart = async (selectedRows: API_Task.taskListItem[]) => {
   }
 };
 
-
+// 批量停止
+const handleExit = async (selectedRows: API_Task.taskListItem[]) => {
+  const hide = message.loading('正在停止');
+  if (!selectedRows) return true;
+  try {
+    const startableRows = selectedRows.filter((row) => row.status === 2 && row.mode === 1);
+    if (startableRows.length === 0) {
+      hide();
+      message.error('选中的任务中没有可停止的任务');
+      return false;
+    }
+    await exitTask({
+      taskIds: startableRows.map((row) => row.taskId),
+    });
+    hide();
+    message.success('停止成功');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('停止失败, 请重试');
+    return false;
+  }
+};
 
 const TableList: React.FC = () => {
   // 新建窗口的弹窗
@@ -243,24 +265,20 @@ const TableList: React.FC = () => {
           status: 'Default',
         },
         1: {
-          text: '待解析',
+          text: '待开始',
           status: 'Processing',
         },
         2: {
-          text: '解析中',
-          status: 'Processing',
-        },
-        3: {
-          text: '待检测',
-          status: 'Processing',
-        },
-        4: {
-          text: '检测中',
+          text: '正在检测',
           status: 'Processing',
         },
         5: {
           text: '检测完成',
           status: 'Success',
+        },
+        6: {
+          text: '正在停止',
+          status: 'Processing',
         },
       },
     },
@@ -269,10 +287,11 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        const canModify = record.status === 0 || record.status === 100;
-        const canRestart = record.status === 5 || record.status === 100;
+        const canModify: boolean = record.status === 0 || record.status === 100;
+        const canRestart: boolean = record.status === 5 || record.status === 100;
         const canStart: boolean = record.status === 0;
         const canDelete: boolean = record.status === 0 || record.status === 5 || record.status === 100;
+        const canExit: boolean = record.mode === 1 && record.status === 2;
         return [
           canModify && (
             <a
@@ -328,7 +347,24 @@ const TableList: React.FC = () => {
             >
               删除任务
             </a>
-          )
+          ),
+          canExit && (
+            <a
+              key="exitTask"
+              onClick={async () => {
+                await handleExit([record]);
+                setCurrentRow(record);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                  setAutoReload(true);
+                } else {
+                  message.error('任务已经停止');
+                }
+              }}
+            >
+              停止任务
+            </a>
+          ),
         ];
       },
     },
@@ -361,7 +397,7 @@ const TableList: React.FC = () => {
             pageSize: params.pageSize,
           });
           if (msg.success && msg.data) {
-            setAutoReload(msg.data.some((item) => [1, 2, 3, 4].includes(item.status)));
+            setAutoReload(msg.data.some((item) => [1, 2, 3, 4, 6].includes(item.status)));
           }
           else
             setAutoReload(true);

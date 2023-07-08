@@ -81,37 +81,29 @@ const AddForm: React.FC<AddFormProps> = (props) => {
                       }
                     }}
                   />
-                  <ProFormSelect
-                    name="model"
-                    label="选择模型"
-                    width="md"
-                    options={[
-                      { label: '四元组模型', value: 'four' },
-                      { label: '五元组模型', value: 'five' },
-                    ]}
-                    rules={[
-                      {
-                        required: true,
-                        message: '请选择一个模型',
-                      },
-                    ]}
-                  />
+
                 </>
               ) : mode === 1 ? (
-                <ProFormText
-                  name="port"
-                  label='输入抓包端口'
-                  width="md"
-                  rules={[
-                    {
-                      required: true,
-                      message: "请输入端口号"
-                    },
-                  ]}
-                />
+                <>
+                </>
               ) : null;
             }}
           </ProFormDependency>
+          <ProFormSelect
+            name="model"
+            label="选择模型"
+            width="md"
+            options={[
+              { label: '四元组模型', value: 'four' },
+              { label: '五元组模型', value: 'five' },
+            ]}
+            rules={[
+              {
+                required: true,
+                message: '请选择一个模型',
+              },
+            ]}
+          />
         </ProForm.Group>
 
       </ProForm>
