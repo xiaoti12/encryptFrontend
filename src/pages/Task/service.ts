@@ -21,6 +21,7 @@ export async function addTask(body: API_Task.taskListItemAdd, options?: { [key: 
   params.append('mode', body.mode);
   params.append('model', body.model);
   params.append('status', body.status);
+  params.append('netcard', body.netcard);
   params.append('pcapFile', body.pcap_file);
   return request<API_Task.taskListItemAdd>('/myapi/task/createTask', {
     method: 'POST',

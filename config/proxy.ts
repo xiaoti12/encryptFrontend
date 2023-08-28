@@ -31,9 +31,10 @@ export default {
     //   changeOrigin: true,
     // },
     '/myapi/': {
-      target: 'http://localhost:8888',
+      // target: 'http://backend:8100',
+      target: 'http://localhost:8100',
       changeOrigin: true,
-      pathRewrite: { '^/myapi' : '/api' },
+      pathRewrite: { '^/myapi': '/api' },
     },
   },
 

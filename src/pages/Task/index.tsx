@@ -1,19 +1,19 @@
-import {task, addTask, updateTask, removeTask, startTask, exitTask} from '@/pages/Task/service';
-import {PlusOutlined} from '@ant-design/icons';
-import type {ActionType, ProColumns, ProDescriptionsItemProps} from '@ant-design/pro-components';
+import { task, addTask, updateTask, removeTask, startTask, exitTask } from '@/pages/Task/service';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   PageContainer,
   ProDescriptions,
   ProTable,
 } from '@ant-design/pro-components';
 import '@umijs/max';
-import {Button, Drawer, message, Modal, Space} from 'antd';
-import React, {useEffect, useRef, useState} from 'react';
-import type {UpdateFormValueType} from '@/pages/Task/components/UpdateForm';
-import type {AddFormValueType} from '@/pages/Task/components/AddForm';
+import { Button, Drawer, message, Modal, Space } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import type { UpdateFormValueType } from '@/pages/Task/components/UpdateForm';
+import type { AddFormValueType } from '@/pages/Task/components/AddForm';
 import UpdateForm from '@/pages/Task/components/UpdateForm';
 import AddForm from '@/pages/Task/components/AddForm';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 
 // 创建任务
@@ -29,6 +29,7 @@ const handleAdd = async (fields: AddFormValueType) => {
       createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
       mode: fields.mode,
       model: fields.model,
+      netcard: fields.netcard,
       status: 0,
       pcap_file: file,
     });
@@ -72,7 +73,7 @@ const handleRemove = async (selectedRows: API_Task.taskListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    const startableRows = selectedRows.filter((row) => [0, 5, 100].includes(row.status));
+    const startableRows = selectedRows.filter((row) => [0, 2, 5, 100].includes(row.status));
     if (startableRows.length === 0) {
       hide();
       message.error('选中的任务中没有可删除的任务');
@@ -384,14 +385,14 @@ const TableList: React.FC = () => {
               handleModalOpen(true);
             }}
           >
-            <PlusOutlined/> 新建
+            <PlusOutlined /> 新建
           </Button>,
         ]}
 
         request={async (params: {
-                          pageSize?: number;
-                          current?: number;
-                        },) => {
+          pageSize?: number;
+          current?: number;
+        },) => {
           const msg = await task({
             current: params.current,
             pageSize: params.pageSize,
@@ -410,21 +411,21 @@ const TableList: React.FC = () => {
         columns={columns}
         rowSelection={{}}
         tableAlertRender={({
-                             selectedRowKeys,
-                             onCleanSelected,
-                           }) => {
+          selectedRowKeys,
+          onCleanSelected,
+        }) => {
           return (
             <Space size={24}>
-            <span>
-              已选 {selectedRowKeys.length} 项
-              <a style={{marginInlineStart: 8}} onClick={onCleanSelected}>
-                取消选择
-              </a>
-            </span>
+              <span>
+                已选 {selectedRowKeys.length} 项
+                <a style={{ marginInlineStart: 8 }} onClick={onCleanSelected}>
+                  取消选择
+                </a>
+              </span>
             </Space>
           );
         }}
-        tableAlertOptionRender={({selectedRows, onCleanSelected}) => {
+        tableAlertOptionRender={({ selectedRows, onCleanSelected }) => {
           return (
             <Space size={16}>
               <a
@@ -525,16 +526,16 @@ const TableList: React.FC = () => {
             }}
             columns={columns as ProDescriptionsItemProps<API_Task.taskListItem>[]}
           >
-            <ProDescriptions.Item label="任务ID" dataIndex="taskId"/>
-            <ProDescriptions.Item label="任务创建时间" dataIndex="createTime" valueType="dateTime"/>
-            <ProDescriptions.Item label="任务开始时间" dataIndex="startTime" valueType="dateTime"/>
-            <ProDescriptions.Item label="任务结束时间" dataIndex="endTime" valueType="dateTime"/>
-            <ProDescriptions.Item label="任务类型" dataIndex="mode" valueType="select"/>
-            <ProDescriptions.Item label="离线检测文件名" dataIndex="pcapPath" valueType="textarea"/>
-            <ProDescriptions.Item label="正常流量数" dataIndex="normal" valueType="textarea"/>
-            <ProDescriptions.Item label="异常流量数" dataIndex="abnormal" valueType="textarea"/>
-            <ProDescriptions.Item label="总流量数" dataIndex="total" valueType="textarea"/>
-            <ProDescriptions.Item label="状态" dataIndex="status" valueType="select"/>
+            <ProDescriptions.Item label="任务ID" dataIndex="taskId" />
+            <ProDescriptions.Item label="任务创建时间" dataIndex="createTime" valueType="dateTime" />
+            <ProDescriptions.Item label="任务开始时间" dataIndex="startTime" valueType="dateTime" />
+            <ProDescriptions.Item label="任务结束时间" dataIndex="endTime" valueType="dateTime" />
+            <ProDescriptions.Item label="任务类型" dataIndex="mode" valueType="select" />
+            <ProDescriptions.Item label="离线检测文件名" dataIndex="pcapPath" valueType="textarea" />
+            <ProDescriptions.Item label="正常流量数" dataIndex="normal" valueType="textarea" />
+            <ProDescriptions.Item label="异常流量数" dataIndex="abnormal" valueType="textarea" />
+            <ProDescriptions.Item label="总流量数" dataIndex="total" valueType="textarea" />
+            <ProDescriptions.Item label="状态" dataIndex="status" valueType="select" />
           </ProDescriptions>
         )}
       </Drawer>

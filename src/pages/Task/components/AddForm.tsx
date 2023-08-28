@@ -5,8 +5,9 @@ import {
   ProFormDependency,
   ProFormRadio,
   ProFormSelect,
+  ProFormInput
 } from '@ant-design/pro-components';
-import {Modal} from 'antd';
+import { Modal } from 'antd';
 import React from 'react';
 
 export type AddFormValueType = {
@@ -26,7 +27,7 @@ const AddForm: React.FC<AddFormProps> = (props) => {
   return (
     <Modal
       width={640}
-      bodyStyle={{padding: '32px 40px 48px'}}
+      bodyStyle={{ padding: '32px 40px 48px' }}
       destroyOnClose
       title='新建任务'
       open={props.addModalOpen}
@@ -58,9 +59,10 @@ const AddForm: React.FC<AddFormProps> = (props) => {
             },
           ]}
         />
+
         <ProForm.Group>
           <ProFormDependency name={["mode"]}>
-            {({mode}) => {
+            {({ mode }) => {
               return mode === 0 ? (
                 <>
 
@@ -84,8 +86,19 @@ const AddForm: React.FC<AddFormProps> = (props) => {
 
                 </>
               ) : mode === 1 ? (
-                <>
-                </>
+                <ProFormText
+                  width="md"
+                  name="netcard"
+                  label="监听网口"
+                  placeholder="请输入在线检测要监听的网口"
+
+                  rules={[
+                    {
+                      required: true,
+                      message: '请选择一个模型',
+                    },
+                  ]}
+                />
               ) : null;
             }}
           </ProFormDependency>
