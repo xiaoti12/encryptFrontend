@@ -53,7 +53,7 @@ const IntroduceRow = ({loading, introduceData}: { loading: boolean; introduceDat
     <Col {...topColResponsiveProps}>
       <ChartCard
         bordered={false}
-        title="活跃任务"
+        title="总任务"
         loading={loading}
         total={() => introduceData?.activeTask?.offline + introduceData?.activeTask?.online}
         footer={

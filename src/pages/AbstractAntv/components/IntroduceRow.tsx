@@ -22,7 +22,7 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
     <Col {...topColResponsiveProps}>
       <ChartCard
         bordered={false}
-        title="活跃任务"
+        title="总任务"
         loading={loading}
         total={() => visitData.length}
         footer={
